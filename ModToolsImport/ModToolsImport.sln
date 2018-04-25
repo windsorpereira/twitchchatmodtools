@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModTools", "ModTools\ModTools.csproj", "{13BCCB9D-12B8-4DE4-9E5A-7975ECDFB03D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModToolsImport", "ModToolsImport\ModToolsImport.csproj", "{CA7C971C-154A-4CA2-9DBD-5DE010ADCC8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13BCCB9D-12B8-4DE4-9E5A-7975ECDFB03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13BCCB9D-12B8-4DE4-9E5A-7975ECDFB03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13BCCB9D-12B8-4DE4-9E5A-7975ECDFB03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13BCCB9D-12B8-4DE4-9E5A-7975ECDFB03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA7C971C-154A-4CA2-9DBD-5DE010ADCC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA7C971C-154A-4CA2-9DBD-5DE010ADCC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA7C971C-154A-4CA2-9DBD-5DE010ADCC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA7C971C-154A-4CA2-9DBD-5DE010ADCC8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {79EB7ACE-5C09-4F47-9557-52824E7D43E4}
+		SolutionGuid = {5486EA91-8F42-42D3-BC18-E5B2957B56F0}
 	EndGlobalSection
 EndGlobal
