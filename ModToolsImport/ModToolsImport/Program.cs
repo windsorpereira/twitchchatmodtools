@@ -40,12 +40,12 @@ namespace ModToolsImport
 
                                 bool timeout = false;
                                 bool ban = false;
-                                int tempoTimeout;
+                                int? tempoTimeout = 0;
 
                                 bool modAction = false;
                                 bool logChat = false;
 
-                                if (linha.Split(' ')[1][0] == '<')
+                                if (linha.Split(' ').Length > 1 && linha.Split(' ')[1][0] == '<')
                                 {
                                     logChat = true;
 
@@ -75,22 +75,19 @@ namespace ModToolsImport
                                     dataEvento = data.Add(horaMensagem);
 
                                     usuario = linha.Split(' ')[2];
-
-                                    viewer = linha.Split(' ')[4];
-
+                                    
                                     timeout = linha.Contains("(timeout") ? true : false;
                                     ban = linha.Contains("(ban") ? true : false;
-
-                                    tempoTimeout = 0;
-
+                                    
                                     if (linha.Contains("(timeout"))
                                     {
-                                        int.TryParse(linha.Split(' ')[5], out tempoTimeout);
+                                        tempoTimeout = int.Parse(linha.Split(' ')[5].ToString());
                                     }
 
                                     if (ban || timeout)
                                     {
                                         modAction = true;
+                                        viewer = linha.Split(' ')[4];
                                     }
                                 }
 
@@ -141,7 +138,7 @@ namespace ModToolsImport
                                         if (dbUsuario == null)
                                         {
                                             var queryInsertUsuario = new SqlCommand(string.Format(sqlInsertUsuario, viewer, 0, 0), conn);
-                                            
+
                                             queryInsertUsuario.ExecuteNonQuery();
 
                                             var queryId = new SqlCommand(sqlInsertedId, conn);
@@ -151,6 +148,51 @@ namespace ModToolsImport
                                         else
                                         {
                                             idViewer = int.Parse(dbUsuario.ToString());
+                                        }
+
+                                        var sqlInsertModAction = "insert into moderacao (id_moderador, id_viewer, dt_data, fl_ban, fl_timeout, in_tempo) values (@idModerador, @idViewer, @data, @ban, @timeout, @tempo)";
+
+                                        var sqlModAction = "select count(1) from moderacao where id_moderador = @idModerador and dt_data = @data";
+
+                                        var queryModAction = new SqlCommand(sqlModAction, conn);
+
+                                        queryModAction.Parameters.Add(new SqlParameter("data", dataEvento));
+                                        queryModAction.Parameters.Add(new SqlParameter("idModerador", idUsuario));
+
+                                        if (int.Parse(queryModAction.ExecuteScalar().ToString()) <= 0)
+                                        {
+                                            var queryInsertModAction = new SqlCommand(sqlInsertModAction, conn);
+
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("data", dataEvento));
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("idModerador", idUsuario));
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("idViewer", idViewer));
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("ban", ban));
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("timeout", timeout));
+                                            queryInsertModAction.Parameters.Add(new SqlParameter("tempo", tempoTimeout));
+
+                                            queryInsertModAction.ExecuteNonQuery();
+                                        }
+                                    }
+                                    else if (logChat)
+                                    {
+                                        var sqlInsertMensagem = "insert into mensagem (id_usuario, dt_data, st_mensagem) values (@idUsuario, @data, @mensagem)";
+
+                                        var sqlMensagem = "select count(1) from mensagem where dt_data = @data AND id_usuario = @idUsuario";
+
+                                        var queryMensagem = new SqlCommand(sqlMensagem, conn);
+
+                                        queryMensagem.Parameters.Add(new SqlParameter("data", dataEvento));
+                                        queryMensagem.Parameters.Add(new SqlParameter("idUsuario", idUsuario));
+
+                                        if (int.Parse(queryMensagem.ExecuteScalar().ToString()) <= 0)
+                                        {
+                                            var queryInsertMensagem = new SqlCommand(sqlInsertMensagem, conn);
+
+                                            queryInsertMensagem.Parameters.Add(new SqlParameter("data", dataEvento));
+                                            queryInsertMensagem.Parameters.Add(new SqlParameter("idUsuario", idUsuario));
+                                            queryInsertMensagem.Parameters.Add(new SqlParameter("mensagem", mensagem));
+
+                                            queryInsertMensagem.ExecuteNonQuery();
                                         }
                                     }
                                 }
